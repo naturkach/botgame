@@ -3,6 +3,8 @@
 
 from board import Board
 from command import Command
+from element import Element
+import random
 
 """ This class should contain the movement generation algorithm."""
 class DirectionSolver:
@@ -16,7 +18,11 @@ class DirectionSolver:
 
     """ Implement your logic here """
     def next_command(self):
-        #_command = Command('RIGHT').to_string()
+      #  _command = Command('RIGHT').to_string()
+      #  print(self._board.to_string())
+      #  print("Sending Command: {}\n".format(_command))
+      #  return _command
+        _command = Command('RIGHT').to_string()
         print(self._board.to_string())
         #print("hero - ", self._board.get_hero())
         heroPlace = self._board.get_hero()
@@ -26,24 +32,45 @@ class DirectionSolver:
         print("hero y-", heroPlace.get_y())
         print("exit x-", exitPlace[0].get_x())
         print("exit_y-", exitPlace[0].get_y())
+        #wallinR = False
 
-        print(self._board.get_walls())       
+        wallinRList = self._board._find_all(Element('WALL_RIGHT'))
+        print("wall in right", wallinRList)
+        #wallinL = self._board._find_all(Element('WALL_LEFT'))
+        #print("wall in left", wallinL)
+        #wallinF = self._board._find_all(Element('WALL_FRONT'))
+        #print("wall in front", wallinF)
+        #wallinB = self._board._find_all(Element('WALL_BACK'))
+        #print("wall in back", wallinB)
+       # space = self._board._find_all(Element('SPACE'))
+       # print("space in", space)
 
         hinx = heroPlace.get_x()
         hiny = heroPlace.get_y()
-        xinx = exitPlace[0].get_x()
-        xiny = exitPlace[0].get_y()
+        exinx = exitPlace[0].get_x()
+        exiny = exitPlace[0].get_y()
+        #whatinR = self._board.get_at(hinx, hiny)
+        #print("in R", whatinR)
+        righthend = [hinx+1,hiny]
+        print("rh-",righthend)
+        if (righthend in wallinRList):
+            wallinR = True
+            print("dont go to right")
 
-        if(hinx < xinx):
+        '''
+        if(hinx < exinx):
             _command = Command('RIGHT').to_string()
-        elif(hiny < xiny):
+        elif(hiny < exiny):
             _command = Command('DOWN').to_string()
-        elif(hinx > xinx):
+        elif(hinx > exinx):
             _command = Command('LEFT').to_string()
-        elif(hiny > xiny):
+        elif(hiny > exiny):
             _command = Command('UP').to_string()
-        
+        else:
+            waylist = ['UP','DOWN','LEFT','RIGHT']
+            _command = Command(random.choice(waylist))
 
+        '''        
         print("Sending Command: {}\n".format(_command))
         return _command
 
