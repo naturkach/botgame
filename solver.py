@@ -77,30 +77,50 @@ class DirectionSolver:
         righthend.insert(1,hiny)
 
         print("rh-",righthend)
-        blockedway = False
+        blockedRight = False
+        blockedLeft = False
+        blockedDOWN = False
+        blockedUP = False
+
         rightclear = False
         leftclear = False
         upclear = False
         downclear = False
 
-        if(self._board.is_at(hinx + 1, hiny,Element('WALL_RIGHT'))):
-            blockedway = True
-            print("wall in righthend")
-        if(self._board.is_at(hinx + 1, hiny, Element('ANGLE_IN_RIGHT'))):
-            blockedway = True
-            print("angle in right")
-        if(self._board.is_at(hinx + 1, hiny, Element('WALL_BACK_ANGLE_LEFT'))):
-            blockedway = True
-            print("wall angle")
+        walls = ['WALL_RIGHT','WALL_LEFT','ANGLE_IN_RIGHT','WALL_BACK_ANGLE_LEFT']
+        for wall in walls:
+            if(self._board.is_at(hinx + 1, hiny,Element(wall))):
+                blockedRight = True
+                print("noway! wall in righthend")
+            if(self._board.is_at(hinx - 1, hiny, Element(wall))):
+                blockedLeft = True
+                print("noway! wall in left")
+            if(self._board.is_at(hinx, hiny+1, Element(wall))):
+                blockedDOWN = True
+                print("noway! wall in BOTOM")
+            if(self._board.is_at(hinx, hiny-1, Element(wall))):
+                blockedUP = True
+                print("noway! wall in up")
 
+        '''
         if(self._board.is_at(hinx + 1, hiny, Element('EMPTY'))):
             rightclear = True
+            print("--you can go right")
         if(self._board.is_at(hinx - 1, hiny, Element('EMPTY'))):
             leftclear = True  
+            print("--you can go left")
         if(self._board.is_at(hinx, hiny + 1, Element('EMPTY'))):
             upclear = True
+            print("you can go up")
         if(self._board.is_at(hinx - 1, hiny, Element('EMPTY'))):
             downclear = True
+            print("you can go down")
+        '''
+      #  walls = ['WALL_BACK_ANGLE_LEFT','WALL_FRONT','WALL_RIGHT']
+      #  for wall in walls:
+      #      if(self._board.is_at(hinx + 1, hiny,Element(wall))):
+      #          blright = True
+      #          print("noway! wall in righthend")
 
 
        # print(type(wallinRList[1]))      
@@ -109,12 +129,15 @@ class DirectionSolver:
        #     print("dont go to right")
 
         
-        if(hinx < exinx and not blockedway):
+        if(hinx < exinx and not blockedRight):
             _command = Command('RIGHT').to_string()
-        elif(hiny < exiny):
+        elif(hiny < exiny and not blockedDOWN):
             _command = Command('DOWN').to_string()
         elif(hinx > exinx):
-            _command = Command('LEFT').to_string()
+            if(blockedLeft):
+                _command = Command('RIGHT').to_string()
+            else:
+                _command = Command('LEFT').to_string()
         elif(hiny > exiny):
             _command = Command('UP').to_string()
         else:
@@ -123,7 +146,7 @@ class DirectionSolver:
             print("rand command",randway)
             _command = Command(randway).to_string()
 
-                
+        #_command = Command('LEFT').to_string()        
         print("Sending Command: {}\n".format(_command))
         return _command
 
